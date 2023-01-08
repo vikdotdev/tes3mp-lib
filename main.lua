@@ -25,9 +25,11 @@ local function set_difficulty_cmd(invoker_pid, args)
     set_difficulty_setting(difficulty)
 
     for pid, _ in pairs(Players) do
-      tes3mp.SetDifficulty(pid, difficulty)
-      tes3mp.SendSettings(pid)
-      tes3mp.SendMessage(invoker_pid, "Setting difficulty to " .. difficulty .. " for player " .. pid .. "\n")
+      if Players[pid]:IsLoggedIn() then
+        tes3mp.SetDifficulty(pid, difficulty)
+        tes3mp.SendSettings(pid)
+        tes3mp.SendMessage(invoker_pid, "Setting difficulty to " .. difficulty .. " for player " .. pid .. "\n")
+      end
     end
   else
     tes3mp.SendMessage(invoker_pid, "Permission denied.")
