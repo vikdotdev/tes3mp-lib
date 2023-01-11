@@ -5,3 +5,6 @@ all players. Works after character creation, player log-in and in real time
 too. Provides the `/getdifficulty` and `/setdifficulty` commands. The latter
 accepts a single numeric argument.
 
+## Thought Implant
+Just a simple way for an admin to send immersive message boxes to a certain
+player for role-playing purposes.
