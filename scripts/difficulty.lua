@@ -1,3 +1,7 @@
+local function is_player_authorized(pid)
+  return Players[pid].data.settings.staffRank >= 2
+end
+
 local function set_difficulty_setting(difficulty)
   WorldInstance.data.customVariables.dynamic_difficulty = tonumber(difficulty)
 end
@@ -18,10 +22,26 @@ local function set_difficulty(_, pid)
   end
 end
 
+local function get_difficulty_cmd(_, pid)
+  if is_player_authorized(pid) then
+    local current = get_difficulty_setting()
+
+    if current == nil then
+      current = "was not set by /setdifficulty command."
+    else
+      current = "is set to " .. current
+    end
+
+    tes3mp.SendMessage(pid, "Current difficulty " .. current .. "\n")
+  else
+    tes3mp.SendMessage(invoker_pid, "Permission denied.")
+  end
+end
+
 local function set_difficulty_cmd(invoker_pid, args)
   local difficulty = tonumber(args[2])
 
-  if Players[invoker_pid].data.settings.staffRank >= 2 then
+  if is_player_authorized(invoker_pid) then
     set_difficulty_setting(difficulty)
 
     for pid, _ in pairs(Players) do
@@ -37,5 +57,6 @@ local function set_difficulty_cmd(invoker_pid, args)
 end
 
 customCommandHooks.registerCommand('setdifficulty', set_difficulty_cmd)
+customCommandHooks.registerCommand('getdifficulty', get_difficulty_cmd)
 customEventHooks.registerHandler('OnPlayerEndCharGen', set_difficulty)
 customEventHooks.registerHandler('OnPlayerConnect', set_difficulty)
