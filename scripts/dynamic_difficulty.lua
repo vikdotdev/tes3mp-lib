@@ -22,7 +22,7 @@ local function set_difficulty(_, pid)
   end
 end
 
-local function get_difficulty_cmd(_, pid)
+local function get_difficulty_cmd(pid)
   if is_player_authorized(pid) then
     local current = get_difficulty_setting()
 
@@ -34,7 +34,7 @@ local function get_difficulty_cmd(_, pid)
 
     tes3mp.SendMessage(pid, "Current difficulty " .. current .. "\n")
   else
-    tes3mp.SendMessage(invoker_pid, "Permission denied.")
+    tes3mp.SendMessage(pid, "Permission denied.")
   end
 end
 
